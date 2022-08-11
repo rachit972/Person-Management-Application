@@ -1,5 +1,4 @@
-
-
+let id=0;
 const xhr=new XMLHttpRequest();
 xhr.open('GET',"https://jsonplaceholder.typicode.com/users?utm_source=Mailerlite&utm_medium=E-mail&utm_campaign=Test%20Series&utm_term=2022-08-09");
 xhr.onreadystatechange= () =>{
@@ -26,7 +25,7 @@ xhr.onreadystatechange= () =>{
                             <p>Phone : ${response[i].phone}</p>
                             <p>Website : ${response[i].website}</p>
                             <p>Company : ${response[i].company.name}</p>
-                            <div id="c${response.id}" class="close"><button class="close-button">Close</button></div>
+                            <div class="close"><button class="close-button">Close</button></div>
                         </div>`
             cards.innerHTML=cards.innerHTML+template;
         }
@@ -34,28 +33,50 @@ xhr.onreadystatechange= () =>{
         
         for(let i=0;i<buttons.length;i++){
             buttons[i].addEventListener("click", (e) =>{
-                document.getElementsByClassName("pop-up")[e.target.id].style.display="block"
+                document.getElementsByClassName("pop-up")[e.target.id-1].style.display="block"
             });
         }
 
-        for(let i=0;i<buttons.length;i++){
+        for(let i=0;i<closeButtons.length;i++){
             closeButtons[i].addEventListener("click", (e) =>{
                 e.target.parentElement.parentElement.style.display="none";
             });
         }
+        id=buttons.length;
 
     }
 }
 xhr.send();
 
+document.getElementById("add").addEventListener("click", (e)=>{
+    e.preventDefault();
+    let person={id:id,
+        name:document.getElementById("name-input").value,
+        email:document.getElementById("email-input").value,
+        company:document.getElementById("company-input").value,
+        address:document.getElementById("address-input").value,
+        phone:document.getElementById("phone-input").value,
+        website:document.getElementById("website-input").value,
+    }
+    let template=`<div class="card">
+                    <div><img src="./assets/Profile.png"></div>
+                    <h3>${person.name}</h3>
+                    <p class="title">${person.company}</p>
+                    <p><button id=${id} class="open-pop-up">See More Information</button></p>
+                </div>
+                <div class="pop-up">
+                    <div class="profile-picture"><img src="./assets/Profile.png"></div>
+                    <p>ID : ${id}</p>
+                    <p>Name : ${person.name}</p>
+                    <p>Email : ${person.email}</p>
+                    <p>Address : ${person.address}</p>
+                    <p>Phone : ${person.phone}</p>
+                    <p>Website : ${person.website}</p>
+                    <p>Company : ${person.companyname}</p>
+                    <div class="close"><button class="close-button">Close</button></div>
+                </div>`
+    const cards=document.getElementById("cards");
+    cards.innerHTML=cards.innerHTML+template;
 
-
-
-
-// function openForm() {
-//     document.getElementById("myForm").style.display = "block";
-//   }
-  
-//   function closeForm() {
-//     document.getElementById("myForm").style.display = "none";
-//   }
+    id++;
+})
